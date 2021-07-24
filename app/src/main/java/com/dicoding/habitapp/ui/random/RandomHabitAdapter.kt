@@ -52,6 +52,7 @@ class RandomHabitAdapter(
         fun bind(pageType: PageType, pageData: Habit) {
             tvTitle.text = pageData.title
             tvStartTime.text = pageData.startTime
+            tvMinutes.text = pageData.minutesFocus.toString()
             val icPriority = when (pageData.priorityLevel.toLowerCase(Locale.ROOT)){
                 "high"      -> R.drawable.ic_priority_high
                 "medium"    -> R.drawable.ic_priority_medium
