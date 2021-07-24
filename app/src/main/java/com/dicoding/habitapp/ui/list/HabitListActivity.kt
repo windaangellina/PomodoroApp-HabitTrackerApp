@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.data.Habit
+import com.dicoding.habitapp.setting.SettingsActivity
 import com.dicoding.habitapp.ui.ViewModelFactory
 import com.dicoding.habitapp.ui.add.AddHabitActivity
 import com.dicoding.habitapp.ui.detail.DetailHabitActivity
+import com.dicoding.habitapp.ui.random.RandomHabitActivity
 import com.dicoding.habitapp.utils.Event
 import com.dicoding.habitapp.utils.HABIT_ID
 import com.dicoding.habitapp.utils.HabitSortType
@@ -73,8 +75,20 @@ class HabitListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
-
-
+            R.id.action_filter -> {
+                showFilteringPopUpMenu()
+                true
+            }
+            R.id.action_random -> {
+                val toRandomIntent = Intent(applicationContext, RandomHabitActivity::class.java)
+                startActivity(toRandomIntent)
+                true
+            }
+            R.id.action_settings -> {
+                val toSettingIntent = Intent(applicationContext, SettingsActivity::class.java)
+                startActivity(toSettingIntent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
