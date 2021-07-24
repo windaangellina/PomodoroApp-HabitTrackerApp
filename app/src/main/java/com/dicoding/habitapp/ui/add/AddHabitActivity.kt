@@ -47,6 +47,7 @@ class AddHabitActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListe
                 if (title.isNotEmpty()) {
                     val habit = Habit(title = title, minutesFocus = minutesFocus, startTime = startTime, priorityLevel = priorityLevel)
                     viewModel.saveHabit(habit)
+                    Toast.makeText(this, "New habit is added!", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
                     Toast.makeText(this, getString(R.string.empty_message), Toast.LENGTH_SHORT).show()
