@@ -1,5 +1,6 @@
 package com.dicoding.habitapp.ui.random
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.data.Habit
+import com.dicoding.habitapp.ui.countdown.CountDownActivity
+import com.dicoding.habitapp.utils.HABIT
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
@@ -53,13 +56,15 @@ class RandomHabitAdapter(
             tvTitle.text = pageData.title
             tvStartTime.text = pageData.startTime
             tvMinutes.text = pageData.minutesFocus.toString()
-            val icPriority = when (pageData.priorityLevel.toLowerCase(Locale.ROOT)){
-                "high"      -> R.drawable.ic_priority_high
-                "medium"    -> R.drawable.ic_priority_medium
-                "low"       -> R.drawable.ic_priority_low
-                else -> R.drawable.ic_priority_low
+
+            val icPriority = when (pageType){
+                PageType.HIGH      -> R.drawable.ic_priority_high
+                PageType.MEDIUM    -> R.drawable.ic_priority_medium
+                PageType.LOW       -> R.drawable.ic_priority_low
             }
             ivPriority.setImageResource(icPriority)
+
+            btnStartCountdown.setOnClickListener { onClick(pageData) }
         }
     }
 }
