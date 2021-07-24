@@ -7,14 +7,19 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.data.Habit
 import com.dicoding.habitapp.ui.ViewModelFactory
 import com.dicoding.habitapp.ui.add.AddHabitActivity
+import com.dicoding.habitapp.ui.detail.DetailHabitActivity
 import com.dicoding.habitapp.utils.Event
+import com.dicoding.habitapp.utils.HABIT_ID
 import com.dicoding.habitapp.utils.HabitSortType
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -35,13 +40,17 @@ class HabitListActivity : AppCompatActivity() {
         }
 
         //TODO 6 : Initiate RecyclerView with LayoutManager
-
+        initRecyclerView()
         initAction()
 
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory).get(HabitListViewModel::class.java)
 
         //TODO 7 : Submit pagedList to adapter and update database when onCheckChange
+        viewModel.habits.observe(this, Observer(this::showRecyclerView))
+
+        // TODO 15 : fix SnackBar bug not showing
+        viewModel.snackbarText.observe(this, Observer(this::showSnackBar))
     }
 
     //TODO 15 : Fixing bug : Menu not show and SnackBar not show when list is deleted using swipe
@@ -57,11 +66,16 @@ class HabitListActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return true
+        return when(item.itemId){
+
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun showFilteringPopUpMenu() {
@@ -107,5 +121,23 @@ class HabitListActivity : AppCompatActivity() {
 
         })
         itemTouchHelper.attachToRecyclerView(recycler)
+    }
+
+    private fun initRecyclerView(){
+        recycler = findViewById(R.id.rv_habit)
+        recycler.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(applicationContext)
+        }
+    }
+
+    private fun showRecyclerView(habits : PagedList<Habit>){
+        val habitAdapter = HabitAdapter { habit ->
+            val detailIntent = Intent(this@HabitListActivity, DetailHabitActivity::class.java)
+            detailIntent.putExtra(HABIT_ID, habit.id)
+            startActivity(detailIntent)
+        }
+        habitAdapter.submitList(habits)
+        recycler.adapter = habitAdapter
     }
 }
