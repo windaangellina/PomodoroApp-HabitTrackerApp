@@ -10,6 +10,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedList
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -127,7 +128,7 @@ class HabitListActivity : AppCompatActivity() {
         recycler = findViewById(R.id.rv_habit)
         recycler.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(applicationContext)
+            layoutManager = GridLayoutManager(applicationContext, 2)
         }
     }
 
