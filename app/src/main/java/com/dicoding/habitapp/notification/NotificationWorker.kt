@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.dicoding.habitapp.R
-import com.dicoding.habitapp.data.HabitRepository
 import com.dicoding.habitapp.ui.countdown.CountDownActivity
 import com.dicoding.habitapp.ui.detail.DetailHabitActivity
 import com.dicoding.habitapp.ui.list.HabitListActivity

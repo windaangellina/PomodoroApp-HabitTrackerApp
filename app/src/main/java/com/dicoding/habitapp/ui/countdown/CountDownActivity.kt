@@ -1,13 +1,13 @@
 package com.dicoding.habitapp.ui.countdown
 
-import android.app.AlarmManager
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
@@ -19,12 +19,12 @@ import com.dicoding.habitapp.notification.NotificationWorker
 import com.dicoding.habitapp.utils.HABIT
 import com.dicoding.habitapp.utils.HABIT_ID
 import com.dicoding.habitapp.utils.HABIT_TITLE
-import java.lang.Exception
 import java.util.*
 
 class CountDownActivity : AppCompatActivity() {
     private lateinit var workManager: WorkManager
     private lateinit var oneTimeWorkRequest : OneTimeWorkRequest
+    private var startCountDown = false
 
     companion object{
         const val TAG = "CountdownActivity"
@@ -51,22 +51,19 @@ class CountDownActivity : AppCompatActivity() {
         //TODO 13 : Start and cancel One Time Request WorkManager to notify when time is up.
         viewModel.eventCountDownFinish.observe(this, {
             updateButtonState(!it)
-            if (it){
-                Toast.makeText(
-                    applicationContext,
-                    "Countdown ${habit.title} done!",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (it && startCountDown){
                 startOneTimeTask(habit)
             }
         })
 
         findViewById<Button>(R.id.btn_start).setOnClickListener {
             viewModel.startTimer()
+            startCountDown = true
         }
 
         findViewById<Button>(R.id.btn_stop).setOnClickListener {
             viewModel.resetTimer()
+            startCountDown = false
             cancelWorkManager()
         }
     }
@@ -93,12 +90,16 @@ class CountDownActivity : AppCompatActivity() {
                 if (workInfo.state == WorkInfo.State.ENQUEUED) {
                     Log.d(TAG, "Notification has been enqueued. Status : $status")
                 }
+                else if (workInfo.state == WorkInfo.State.CANCELLED){
+                    Log.d(TAG, "Notification has been cancelled")
+                }
             })
     }
 
     private fun cancelWorkManager(){
         try {
             workManager.cancelWorkById(oneTimeWorkRequest.id)
+            Log.d(TAG, "Cancelling WorkManager successful!")
         }catch (e : Exception){
             Log.d(TAG, "Cancelling WorkManager failed due to ${e.message}")
         }
