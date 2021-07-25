@@ -1,6 +1,5 @@
 package com.dicoding.habitapp.ui.random
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.data.Habit
-import com.dicoding.habitapp.ui.countdown.CountDownActivity
-import com.dicoding.habitapp.utils.HABIT
-import java.util.*
-import kotlin.collections.LinkedHashMap
 
 class RandomHabitAdapter(
     private val onClick: (Habit) -> Unit
@@ -63,7 +58,6 @@ class RandomHabitAdapter(
                 PageType.LOW       -> R.drawable.ic_priority_low
             }
             ivPriority.setImageResource(icPriority)
-
             btnStartCountdown.setOnClickListener { onClick(pageData) }
         }
     }
